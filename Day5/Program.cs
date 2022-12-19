@@ -32,14 +32,9 @@ foreach (string layout in initialLayout.Skip(1))
     }
 }
 
-//foreach (var crate in crates) {
-//    Console.WriteLine($"In Crate {crate.Key} before");
-//    crate.Value.TryPeek(out string topOfStack);
-//    Console.WriteLine($"TopOfStack {topOfStack}");
-//}
-
 foreach (string move in crateMoves)
 {
+    var tempCrate = new Stack<string>();
     var moveConfiguration = move.Split(" ");
     var itemsToMove = int.Parse(moveConfiguration[1]);
     var fromCrate = int.Parse(moveConfiguration[3]);
@@ -50,16 +45,15 @@ foreach (string move in crateMoves)
     Console.WriteLine($"To {toCrate} : {string.Join(",", crates[toCrate])}");
     for (int moveItemCounter = 0; moveItemCounter < itemsToMove; moveItemCounter++)
     {
-        crates[toCrate].Push(crates[fromCrate].Pop());
+        tempCrate.Push(crates[fromCrate].Pop());
+    }
+    for (int moveItemCounter = 0; moveItemCounter < itemsToMove; moveItemCounter++) 
+    {
+        crates[toCrate].Push(tempCrate.Pop());
     }
 
     Console.WriteLine($"After move {string.Join(",", crates[toCrate])}");
 }
 
-foreach (var crate in crates)
-{
-    Console.WriteLine($"In Crate {crate.Key}");
-    crate.Value.TryPeek(out string topOfStack);
-    Console.WriteLine($"TopOfStack {topOfStack}");
-}
+Console.WriteLine($"{string.Join("", crates.Values.Select(v => v.Pop()))}");
 
